@@ -12,6 +12,11 @@ const ProfileMenu = ({ user, logout }) => {
         <Avatar src={user?.picture} alt="user Image" radius={"xl"} />
       </Menu.Target>
       <Menu.Dropdown>
+        <Menu.Item>
+          {user?.name}
+          <br />
+          {user?.email}
+        </Menu.Item>
         <Menu.Item onClick={() => navigate("./favourites", { replace: true })}>
           Favourites
         </Menu.Item>
