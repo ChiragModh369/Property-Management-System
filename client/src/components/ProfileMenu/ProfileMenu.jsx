@@ -24,6 +24,11 @@ const ProfileMenu = ({ user, logout }) => {
           Bookings
         </Menu.Item>
         <Menu.Item
+          onClick={() => navigate("./PersonalProperties", { replace: true })}
+        >
+          Personal Properties
+        </Menu.Item>
+        <Menu.Item
           onClick={() => {
             localStorage.clear();
             logout();
