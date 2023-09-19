@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import "../Properties/Properties.css";
 import SearchBar from "../../components/SeachBar/SearchBar";
-import useProperties from "../../hooks/useProperties";
+// import useProperties from "../../hooks/useProperties";
 import { PuffLoader } from "react-spinners";
 import PropertyCard from "../../components/PropertyCard/PropertyCard";
+import UseAddedProperties from "../../hooks/useAddedProperties";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const PersonalProperties = () => {
-  const { data, isError, isLoading } = useProperties();
+  const { user } = useAuth0();
+  const { data, isError, isLoading } = UseAddedProperties();
   const [filter, setFilter] = useState("");
-
+  console.log(data);
   if (isError) {
     return (
       <div className="wrapper">

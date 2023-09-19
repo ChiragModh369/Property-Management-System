@@ -55,3 +55,21 @@ export const getResidency = asyncHandler(async (req, res) => {
         throw new Error(err.message)
     }
 })
+
+//  function to get Added Residency
+
+export const getAddedResidencies = asyncHandler(async (req, res) => {
+
+    const { email } = req.params
+
+    try {
+        const AddedResideincies = await prisma.residency.findMany({
+            where: { userEmail: email }
+        })
+        res.send(AddedResideincies)
+
+    } catch (err) {
+        throw new Error(err.message)
+    }
+
+})
