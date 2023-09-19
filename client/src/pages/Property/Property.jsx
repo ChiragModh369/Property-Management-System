@@ -160,6 +160,19 @@ const Property = () => {
               propertyId={id}
               email={user?.email}
             />
+
+            {/* Update Button  */}
+            {data?.userEmail == user?.email ? (
+              <>
+                <div className="flexStart  innerWidth property-container">
+                  <Button className="button">Update</Button>
+
+                  <Button className="button red">Delete</Button>
+                </div>
+              </>
+            ) : (
+              <span></span>
+            )}
           </div>
 
           {/* Right side */}

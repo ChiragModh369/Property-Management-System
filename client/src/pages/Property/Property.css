@@ -48,6 +48,12 @@ gap: 0.5rem;
    transform: scale(1.05);
 }
 
+.red{
+    background: red;
+}
+
+
+
 @media (max-width:700px) {
     .property-container>div{
         flex-direction: column;
