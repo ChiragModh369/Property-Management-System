@@ -73,3 +73,18 @@ export const getAddedResidencies = asyncHandler(async (req, res) => {
     }
 
 })
+
+// Function to Delete Residency
+
+export const deleteResidency = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const removeResd = await prisma.residency.delete({
+            where: { id: id }
+        })
+        res.send("Residency Deleted Successfully")
+    } catch (err) {
+        throw new Error(err.message);
+    }
+})
