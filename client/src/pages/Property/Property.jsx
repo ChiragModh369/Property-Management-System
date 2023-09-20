@@ -1,10 +1,15 @@
 import React, { useContext, useState } from "react";
 import "./Property.css";
 import { useMutation, useQuery } from "react-query";
-import { useLocation } from "react-router-dom";
-import { getProperty, removeBooking } from "../../utils/api";
+import { useLocation, useNavigate } from "react-router-dom";
+import {
+  getProperty,
+  removeBooking,
+  removeResidency,
+  toFav,
+} from "../../utils/api";
 import { PuffLoader } from "react-spinners";
-import { AiFillHeart, AiTwotoneCar } from "react-icons/ai";
+import { AiTwotoneCar } from "react-icons/ai";
 import { FaShower } from "react-icons/fa";
 import { MdLocationPin, MdMeetingRoom } from "react-icons/md";
 import Map from "../../components/Map/Map";
@@ -15,8 +20,11 @@ import { Button } from "@mantine/core";
 import useAuthCheck from "../../hooks/useAuthCheck";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
+import { updateFavourites } from "../../utils/common";
 
 const Property = () => {
+  const navigate = useNavigate();
+
   const { pathname } = useLocation();
   //   console.log(pathname);
   const id = pathname.split("/").slice(-1)[0];
@@ -31,7 +39,7 @@ const Property = () => {
   const { user } = useAuth0();
 
   const {
-    userDetails: { token, bookings },
+    userDetails: { token, bookings, favourites },
     setUserDetails,
   } = useContext(UserDetailContext);
 
@@ -45,6 +53,31 @@ const Property = () => {
 
       toast.success("Booking Cancelled", { position: "bottom-right" });
     },
+  });
+  // Delete Favourites
+
+  const { mutate } = useMutation({
+    mutationFn: () => toFav(id, user?.email, token),
+    onSuccess: () => {
+      setUserDetails((prev) => ({
+        ...prev,
+        favourites: updateFavourites(id, prev.favourites),
+      }));
+    },
+  });
+  // Deleting Property
+
+  const handelDeleteSuccess = () => {
+    mutate();
+    cancelBooking();
+    navigate("/properties");
+    toast.success("Residency Deleted", { position: "bottom-right" });
+  };
+
+  const { mutate: removeProperty, isLoading: Deleting } = useMutation({
+    mutationFn: () => removeResidency(id, token),
+    onSuccess: () => handelDeleteSuccess(),
+    onError: ({ response }) => toast.error(response.data.message),
   });
 
   if (isLoading) {
@@ -167,11 +200,17 @@ const Property = () => {
                 <div className="flexStart  innerWidth property-container">
                   <Button className="button">Update</Button>
 
-                  <Button className="button red">Delete</Button>
+                  <Button
+                    className="button red"
+                    onClick={() => removeProperty()}
+                    disabled={Deleting}
+                  >
+                    <span> Delete</span>
+                  </Button>
                 </div>
               </>
             ) : (
-              <span></span>
+              <span />
             )}
           </div>
 

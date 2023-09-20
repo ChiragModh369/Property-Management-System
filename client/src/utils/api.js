@@ -185,3 +185,17 @@ export const createResidency = async (data, token) => {
         throw error
     }
 }
+
+export const removeResidency = async (id, token) => {
+    try {
+        await api.delete(`/residency/delResd/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+    }
+    catch (error) {
+        toast.error("Something Went Wrong while Deleting Residency", { position: "bottom-right" })
+        throw error
+    }
+}
