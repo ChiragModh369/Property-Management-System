@@ -54,8 +54,8 @@ const Property = () => {
       toast.success("Booking Cancelled", { position: "bottom-right" });
     },
   });
-  // Delete Favourites
 
+  // Delete Favourites
   const { mutate } = useMutation({
     mutationFn: () => toFav(id, user?.email, token),
     onSuccess: () => {
@@ -65,8 +65,8 @@ const Property = () => {
       }));
     },
   });
-  // Deleting Property
 
+  // Deleting Property
   const handelDeleteSuccess = () => {
     mutate();
     cancelBooking();

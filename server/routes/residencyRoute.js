@@ -1,5 +1,5 @@
 import express from "express";
-import { createResidency, deleteResidency, getAddedResidencies, getAllResidencies, getResidency } from "../controllers/resdCntrl.js";
+import { createResidency, deleteResidency, getAddedResidencies, getAllResidencies, getResidency, updateResidency } from "../controllers/resdCntrl.js";
 import jwtCheck from "../config/auth0Config.js";
 const router = express.Router();
 
@@ -8,5 +8,6 @@ router.get("/allresd", getAllResidencies) // to get all Residency
 router.get("/addedresd/:email", getAddedResidencies) // to get added residency by user
 router.get("/:id", getResidency) //to get only specific residency
 router.delete("/delResd/:id", jwtCheck, deleteResidency) //to delete Residency
+router.put("/updateResd/:id", updateResidency) // to Update the  residency
 
 export { router as residencyRoute }

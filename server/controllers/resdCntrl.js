@@ -1,9 +1,10 @@
 import asyncHandler from "express-async-handler"
 import { prisma } from "../Config/prismaConfig.js"
-
+// const moment = import('moment-timezone');
+// const currentTimeInNewTimeZone = moment().tz('Asia/Kolkata');
 export const createResidency = asyncHandler(async (req, res) => {
     const { title, description, price, address, country, city, facilities, image, userEmail } = req.body.data
-    console.log(req.body.data)
+    // console.log(req.body.data)
 
     try {
 
@@ -29,6 +30,39 @@ export const createResidency = asyncHandler(async (req, res) => {
         throw new Error(err.message)
     }
 })
+
+// Function to Update the Residency
+export const updateResidency = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const { title, description, price, address, country, city, facilities, image } = req.body
+
+    try {
+        const residency = await prisma.residency.update({
+            where: {
+                id
+            },
+            data: {
+                title,
+                description,
+                price,
+                address,
+                city,
+                country,
+                image,
+                facilities
+            }
+        });
+
+        if (!residency) {
+            return res.status(404).send({ message: "Residency not found" });
+        }
+
+        res.send({ message: "Residency updated successfully", residency });
+    } catch (error) {
+        console.error('Error updating Residency:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+    }
+});
 // Fuction to get all the residencies
 export const getAllResidencies = asyncHandler(async (req, res) => {
 
