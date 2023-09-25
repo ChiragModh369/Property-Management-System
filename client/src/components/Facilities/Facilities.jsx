@@ -118,7 +118,6 @@ const Facilities = ({
           </Button>
           <Button type="submit" color="green" disabled={isLoading}>
             {isLoading ? "Submitting" : "Add Property"}
-            Add Property
           </Button>
         </Group>
       </form>
