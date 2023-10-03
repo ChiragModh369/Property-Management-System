@@ -86,6 +86,8 @@ export const bookVisit = async (date, propertyId, email, token) => {
 }
 
 export const removeBooking = async (id, email, token) => {
+
+
     try {
         await api.post(`/user/removeBooking/${id}`,
             {
@@ -101,6 +103,7 @@ export const removeBooking = async (id, email, token) => {
         toast.error("Something Went Wrong, Please try again", { position: "bottom-right" })
         throw error
     }
+
 }
 
 export const toFav = async (id, email, token) => {
@@ -166,7 +169,7 @@ export const getAllBookings = async (email, token) => {
 }
 
 export const createResidency = async (data, token) => {
-    console.log(data)
+    // console.log(data)
     try {
         const res = await api.post(
             `/residency/create`,
@@ -186,6 +189,21 @@ export const createResidency = async (data, token) => {
     }
 }
 
+export const updateResidency = async (id, data, token) => {
+    console.log(data)
+
+    try {
+        await api.put(`/residency/updateResd/${id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+    } catch (error) {
+        toast.error("Something Went Wrong while Updating Residency", { position: "bottom-right" })
+        throw error
+    }
+}
+
 export const removeResidency = async (id, token) => {
     try {
         await api.delete(`/residency/delResd/${id}`, {
@@ -199,3 +217,4 @@ export const removeResidency = async (id, token) => {
         throw error
     }
 }
+

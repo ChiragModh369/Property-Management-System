@@ -2,7 +2,7 @@ import asyncHandler from "express-async-handler"
 import { prisma } from "../Config/prismaConfig.js"
 
 export const createUser = asyncHandler(async (req, res) => {
-    console.log("Creating a user");
+    // console.log("Creating a user");
 
     let { email } = req.body;
     const userExist = await prisma.user.findUnique({ where: { email: email } })

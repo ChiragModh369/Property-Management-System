@@ -21,6 +21,7 @@ import useAuthCheck from "../../hooks/useAuthCheck";
 import { toast } from "react-toastify";
 import Heart from "../../components/Heart/Heart";
 import { updateFavourites } from "../../utils/common";
+import UpdatePropertyModal from "../../components/UpdatePropertyModal/UpdatePropertyModal";
 
 const Property = () => {
   const navigate = useNavigate();
@@ -35,6 +36,7 @@ const Property = () => {
   // console.log(data);
 
   const [modalOpened, setModalOpened] = useState(false);
+  const [UpdateModalOpened, setUpdateModalOpened] = useState(false);
   const { validateLogin } = useAuthCheck();
   const { user } = useAuth0();
 
@@ -43,6 +45,7 @@ const Property = () => {
     setUserDetails,
   } = useContext(UserDetailContext);
 
+  // console.log(bookings);
   const { mutate: cancelBooking, isLoading: cancelling } = useMutation({
     mutationFn: () => removeBooking(id, user?.email, token),
     onSuccess: () => {
@@ -54,7 +57,12 @@ const Property = () => {
       toast.success("Booking Cancelled", { position: "bottom-right" });
     },
   });
+  // console.log(favourites);
+  // console.log(id);
+  // console.log(favourites == id);
 
+  // console.log(hasFavourites);
+  // console.log(hasFavourites == id);
   // Delete Favourites
   const { mutate } = useMutation({
     mutationFn: () => toFav(id, user?.email, token),
@@ -65,11 +73,18 @@ const Property = () => {
       }));
     },
   });
-
   // Deleting Property
   const handelDeleteSuccess = () => {
-    mutate();
-    cancelBooking();
+    const hasBooked = bookings?.some((booking) => booking?.id === id);
+    const hasFavourites = favourites?.filter((favourite) => favourite == id);
+    if (hasFavourites == id) {
+      mutate();
+    }
+
+    if (hasBooked) {
+      cancelBooking();
+    }
+
     navigate("/properties");
     toast.success("Residency Deleted", { position: "bottom-right" });
   };
@@ -79,6 +94,14 @@ const Property = () => {
     onSuccess: () => handelDeleteSuccess(),
     onError: ({ response }) => toast.error(response.data.message),
   });
+
+  // Update
+
+  const handleUpdatePropertyClick = () => {
+    if (validateLogin) {
+      setUpdateModalOpened(true);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -198,7 +221,16 @@ const Property = () => {
             {data?.userEmail == user?.email ? (
               <>
                 <div className="flexStart  innerWidth property-container">
-                  <Button className="button">Update</Button>
+                  <Button
+                    className="button"
+                    onClick={handleUpdatePropertyClick}
+                  >
+                    Update
+                  </Button>
+                  <UpdatePropertyModal
+                    updateModalOpened={UpdateModalOpened}
+                    setUpdateOpened={setUpdateModalOpened}
+                  />
 
                   <Button
                     className="button red"
@@ -227,5 +259,4 @@ const Property = () => {
     </div>
   );
 };
-
 export default Property;

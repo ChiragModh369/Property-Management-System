@@ -11,7 +11,7 @@ const PersonalProperties = () => {
   const { user } = useAuth0();
   const { data, isError, isLoading } = UseAddedProperties();
   const [filter, setFilter] = useState("");
-  console.log(data);
+  // console.log(data);
   if (isError) {
     return (
       <div className="wrapper">

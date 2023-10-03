@@ -4,17 +4,26 @@ import { useForm } from "@mantine/form";
 import React, { useContext } from "react";
 import UserDetailContext from "../../context/UserDetailContext";
 import useProperties from "../../hooks/useProperties.jsx";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { createResidency } from "../../utils/api";
+import { useLocation } from "react-router-dom";
+import { getProperty, updateResidency } from "../../utils/api";
 
-const Facilities = ({
+const UpdateFacilities = ({
   prevStep,
   propertyDetails,
   setPropertyDetails,
-  setOpened,
+  setUpdateOpened,
   setActiveStep,
 }) => {
+  const { pathname } = useLocation();
+  //   console.log(pathname);
+  const id = pathname.split("/").slice(-1)[0];
+  //   console.log(id);
+  const { data, isLoading, isError } = useQuery(["resd", id], () =>
+    getProperty(id)
+  );
+
   const form = useForm({
     initialValues: {
       bedrooms: propertyDetails.facilities.bedrooms,
@@ -29,6 +38,10 @@ const Facilities = ({
 
   const { bedrooms, parkings, bathrooms } = form.values;
 
+  const {
+    userDetails: { token },
+  } = useContext(UserDetailContext);
+
   const handleSubmit = () => {
     const { hasErrors } = form.validate();
     if (!hasErrors) {
@@ -36,51 +49,29 @@ const Facilities = ({
         ...prev,
         facilities: { bedrooms, parkings, bathrooms },
       }));
-      // mutate();
     }
   };
 
-  // --------------------------- Upload Logic ---------------------------------
+  //   Update
 
-  const { user } = useAuth0();
-  const {
-    userDetails: { token },
-  } = useContext(UserDetailContext);
-
-  const { refetch: refetchProperties } = useProperties();
-
-  const { mutate, isLoading } = useMutation({
+  const { mutate: updatePropery, isLoading: Updating } = useMutation({
     mutationFn: () =>
-      createResidency(
+      updateResidency(
+        id,
         {
           ...propertyDetails,
           facilities: { bedrooms, parkings, bathrooms },
         },
         token
       ),
-    onSuccess: () => handleSubmit(),
-    onError: ({ response }) =>
-      toast.error(response.data.message, { position: "bottom-right" }),
-    onSettled: () => {
-      toast.success("Added Successfully", { position: "bottom-right" });
-      setPropertyDetails({
-        title: "",
-        description: "",
-        price: 0,
-        country: "",
-        city: "",
-        address: "",
-        image: null,
-        facilities: {
-          bedrooms: 0,
-          parkings: 0,
-          bathrooms: 0,
-        },
-        userEmail: user?.email,
+    onSuccess: () => {
+      toast.success("Residency Updated Successfully", {
+        position: "bottom-right",
       });
-      setOpened(false);
+    },
+    onSettled: () => {
+      setUpdateOpened(false);
       setActiveStep(0);
-      refetchProperties();
     },
   });
 
@@ -120,10 +111,10 @@ const Facilities = ({
           <Button
             type="submit"
             color="green"
-            onClick={() => mutate()}
+            onClick={() => updatePropery()}
             disabled={isLoading}
           >
-            {isLoading ? "Submitting" : "Add Property"}
+            {isLoading ? "Submitting" : "Update Property"}
           </Button>
         </Group>
       </form>
@@ -131,4 +122,4 @@ const Facilities = ({
   );
 };
 
-export default Facilities;
+export default UpdateFacilities;
