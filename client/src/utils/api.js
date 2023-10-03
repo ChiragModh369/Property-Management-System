@@ -54,9 +54,9 @@ export const getProperty = async (id) => {
     }
 }
 
-export const createUser = async (email, token) => {
+export const createUser = async (name, email, token) => {
     try {
-        await api.post(`/user/register`, { email }, {
+        await api.post(`/user/register`, { email, name }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
