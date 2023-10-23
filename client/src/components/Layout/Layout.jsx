@@ -15,10 +15,11 @@ const Layout = () => {
 
   const { isAuthenticated, user, getAccessTokenWithPopup } = useAuth0();
   const { setUserDetails } = useContext(UserDetailContext);
+  const name = user?.nickname;
   // console.log(user?.name);
   const { mutate } = useMutation({
     mutationKey: [user?.email],
-    mutationFn: (token) => createUser(user?.name, user?.email, token),
+    mutationFn: (token) => createUser(name, user?.email, token),
   });
 
   useEffect(() => {
