@@ -4,7 +4,6 @@ import { prisma } from "../Config/prismaConfig.js"
 // const currentTimeInNewTimeZone = moment().tz('Asia/Kolkata');
 export const createResidency = asyncHandler(async (req, res) => {
     const { title, description, price, address, country, city, facilities, image, userEmail } = req.body.data
-    // console.log(req.body.data)
 
     try {
 
