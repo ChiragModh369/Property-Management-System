@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler"
-import { prisma } from "../Config/prismaConfig.js"
+import { prisma } from "../config/prismaConfig.js"
 // const moment = import('moment-timezone');
 // const currentTimeInNewTimeZone = moment().tz('Asia/Kolkata');
 export const createResidency = asyncHandler(async (req, res) => {
