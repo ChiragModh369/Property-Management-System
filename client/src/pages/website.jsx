@@ -3,7 +3,7 @@ import Hero from "../components/Hero/Hero";
 import Companies from "../components/Companies/Companies";
 import Residencies from "../components/Residencies/Residencies";
 import Value from "../components/Value/Value";
-import Contact from "../components/contact/contact";
+import Contact from "../components/Contact/Contact";
 import GetStarted from "../components/GetStarted/GetStarted";
 
 const Website = () => {
