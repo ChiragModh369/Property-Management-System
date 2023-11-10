@@ -3,7 +3,7 @@ import { prisma } from "../config/prismaConfig.js"
 // const moment = import('moment-timezone');
 // const currentTimeInNewTimeZone = moment().tz('Asia/Kolkata');
 export const createResidency = asyncHandler(async (req, res) => {
-    const { title, description, price, address, country, city, facilities, image, userEmail } = req.body.data
+    const { title, description, price, address, country, city, facilities, image, userEmail, } = req.body.data;
 
     try {
 
@@ -18,9 +18,9 @@ export const createResidency = asyncHandler(async (req, res) => {
                 facilities,
                 image,
                 owner: { connect: { email: userEmail } },
-            }
-        })
-        res.send({ message: "Residency created successfully", residency })
+            },
+        });
+        res.send({ message: "Residency created successfully", residency });
 
     } catch (err) {
         if (err.code === "P2002") {
@@ -28,7 +28,7 @@ export const createResidency = asyncHandler(async (req, res) => {
         }
         throw new Error(err.message)
     }
-})
+});
 
 // Function to Update the Residency
 export const updateResidency = asyncHandler(async (req, res) => {
