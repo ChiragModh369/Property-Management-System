@@ -54,6 +54,8 @@ const UpdateFacilities = ({
 
   //   Update
 
+  const { refetch: refetchProperties } = useProperties();
+
   const { mutate: updatePropery, isLoading: Updating } = useMutation({
     mutationFn: () =>
       updateResidency(
@@ -72,6 +74,7 @@ const UpdateFacilities = ({
     onSettled: () => {
       setUpdateOpened(false);
       setActiveStep(0);
+      refetchProperties();
     },
   });
 
