@@ -114,7 +114,7 @@ const UpdateFacilities = ({
             onClick={() => updatePropery()}
             disabled={isLoading}
           >
-            {isLoading ? "Submitting" : "Update Property"}
+            {isLoading ? "Updating" : "Update Property"}
           </Button>
         </Group>
       </form>
